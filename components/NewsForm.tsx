@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef } from 'react'
-import { type News, CATEGORIES } from '@/types/news'
+import { type News, type Category } from '@/types/news'
 import { saveNews } from '@/app/actions/news'
 import { useRouter } from 'next/navigation'
 import TiptapEditor from './TiptapEditor'
@@ -14,9 +14,9 @@ function parseTags(raw: string | string[] | undefined): string[] {
 }
 
 
-type Props = { existing?: News }
+type Props = { existing?: News; categories: Category[] }
 
-export default function NewsForm({ existing }: Props) {
+export default function NewsForm({ existing, categories }: Props) {
   const router  = useRouter()
   const [loading,        setLoading]       = useState(false)
   const [msg, setMsg]                      = useState<{ type: 'error' | 'success'; text: string } | null>(null)
@@ -46,7 +46,7 @@ export default function NewsForm({ existing }: Props) {
   const [form, setForm] = useState({
     title:          existing?.title           ?? '',
     slug:           existing?.slug            ?? '',
-    category:       existing?.category        ?? 'Криптограф',
+    category_id:    existing?.category_id     ?? 0,
     lead:           existing?.lead            ?? '',
     content:        existing?.content         ?? '',
     image_url:      existing?.image_url       ?? '',
@@ -87,7 +87,7 @@ export default function NewsForm({ existing }: Props) {
     const payload = {
       title:           form.title,
       slug:            form.slug,
-      category:        form.category,
+      category_id:     form.category_id,
       lead:            form.lead,
       content:         form.content,
       image_url:       form.image_url,
@@ -148,9 +148,10 @@ export default function NewsForm({ existing }: Props) {
         <div className="adm-grid2">
           <div>
             <label className="adm-label">Ангилал</label>
-            <select className="adm-select" value={form.category}
-              onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
-              {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+            <select className="adm-select" value={form.category_id}
+              onChange={e => setForm(f => ({ ...f, category_id: Number(e.target.value) }))}>
+              <option value={0} disabled>Ангилал сонгох...</option>
+              {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
           <div>

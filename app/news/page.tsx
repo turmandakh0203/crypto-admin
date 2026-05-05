@@ -1,16 +1,20 @@
-import { supabaseAdmin, type News } from '@/lib/supabase'
-import Link from 'next/link'
-import DeleteButton from '@/components/DeleteButton'
+import { deleteNews, getNewsListLimit } from "@/app/actions/news";
+import NewsPagination from "@/components/NewsPagination";
+import Link from "next/link";
+import DeleteButton from "@/components/DeleteButton";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
-export default async function NewsListPage() {
-  const { data } = await supabaseAdmin()
-    .from('news')
-    .select('id, title, slug, category, published, created_at')
-    .order('created_at', { ascending: false })
+interface Props {
+  searchParams: Promise<{ page?: string; limit?: string }>;
+}
 
-  const news = (data ?? []) as Pick<News, 'id' | 'title' | 'slug' | 'category' | 'published' | 'created_at'>[]
+export default async function NewsListPage({ searchParams }: Props) {
+  const params = await searchParams;
+  const page = Math.max(1, Number(params.page) || 1);
+  const limit = [10, 20, 50, 100].includes(Number(params.limit)) ? Number(params.limit) : 10;
+
+  const { data: news, total } = await getNewsListLimit(page, limit);
 
   return (
     <div className="min-h-screen bg-bg text-ink p-6">
@@ -18,45 +22,101 @@ export default async function NewsListPage() {
         <h1 className="font-ttNormsPro font-bold text-3xl">
           <span className="text-accent">Нийтлэлүүд</span>
         </h1>
-        <Link href="/news/new" className="px-4 py-2 bg-accent text-white text-xs tracking-widest uppercase hover:bg-[#c0281f] transition">
+        <Link
+          href="/news/new"
+          className="px-4 py-2 bg-accent font-semibold tracking-[0.16em] rounded-full text-white text-xs tracking-widest uppercase hover:bg-[#c0281f] transition"
+        >
           + Шинэ нийтлэл
         </Link>
       </div>
 
-      <div className="border border-border">
-        {news.length === 0 && (
-          <div className="p-8 text-center text-muted text-xs font-mono">Нийтлэл байхгүй байна</div>
-        )}
-        {news.map((n, i) => (
-          <div key={n.id} className={`flex items-center justify-between px-4 py-3 ${i !== 0 ? 'border-t border-faint' : ''} hover:bg-surface transition`}>
-            <div className="flex items-center gap-4 min-w-0">
-              <span className={`text-[8px] tracking-[0.1em] uppercase px-1.5 py-0.5 border rounded-full font-ttNormsPro flex-shrink-0 ${
-                n.published
-                  ? 'text-success border-[rgba(80,216,128,0.3)] bg-[rgba(80,216,128,0.08)]'
-                  : 'text-accent bg-[rgba(230,51,41,0.08)] border-[rgba(230,51,41,0.4)]'
-              }`}>
-                {n.published ? 'Live' : 'Draft'}
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm text-[#ccc] truncate">{n.title}</p>
-                <p className="text-[9px] text-muted font-mono mt-0.5">{n.category} · {n.slug}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 flex-shrink-0 ml-4">
-              <span className="text-[9px] text-muted font-mono">
-                {new Date(n.created_at).toLocaleDateString('mn-MN')}
-              </span>
-              <Link href={`/news/${n.slug}`} className="text-[9px] tracking-widest uppercase rounded-full border border-border px-3 py-1.5 text-muted hover:text-ink hover:border-[#333] transition">
-                Харах
-              </Link>
-              <Link href={`/news/${n.slug}/edit`} className="text-[9px] tracking-widest uppercase rounded-full border border-border px-3 py-1.5 text-muted hover:text-ink hover:border-[#333] transition">
-                Засах
-              </Link>
-              <DeleteButton id={n.id} />
-            </div>
-          </div>
-        ))}
+      <div className="border border-border rounded-xl overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-border bg-bg">
+              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold w-[70px]">
+                Төлөв
+              </th>
+              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
+                Нийтлэл
+              </th>
+              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold w-[110px]">
+                Ангилал
+              </th>
+              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold w-[110px]">
+                Огноо
+              </th>
+              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold w-[110px]">
+                Үйлдэл
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {news.length === 0 && (
+              <tr>
+                <td colSpan={5} className="p-8 text-center text-muted text-xs font-mono">
+                  Нийтлэл байхгүй байна
+                </td>
+              </tr>
+            )}
+            {news.map((n) => (
+              <tr key={n.id} className="border-t border-faint hover:bg-surface transition">
+                <td className="px-4 py-3">
+                  <span
+                    className={`text-[10px] tracking-[0.1em] uppercase flex justify-center px-1.5 py-0.5 border rounded-full font-bebas ${
+                      n.published
+                        ? "text-success border-[rgba(80,216,128)] bg-[rgba(80,216,128,0.08)]"
+                        : "text-accent bg-[rgba(230,51,41,0.08)] border-[rgba(230,51,41)]"
+                    }`}
+                  >
+                    {n.published ? "Live" : "Draft"}
+                  </span>
+                </td>
+                <td className="px-4 py-3 min-w-0">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={n.image_url || "/placeholder.png"}
+                      alt={n.title}
+                      className="w-12 h-12 object-cover rounded-lg flex-shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-[14px] truncate max-w-[380px]">{n.title}</p>
+                      <p className="text-[11px] text-muted font-mono mt-0.5 truncate max-w-[380px]">
+                        {n.slug}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-[12px] text-muted font-mono whitespace-nowrap">
+                  {n.categories?.name ?? "—"}
+                </td>
+                <td className="px-4 py-3 text-[11px] text-muted font-mono whitespace-nowrap">
+                  {new Date(n.created_at).toLocaleDateString("mn-MN")}
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center justify-end gap-2">
+                    <Link
+                      href={`/news/${n.slug}`}
+                      className="text-[9px] tracking-widest uppercase font-bold rounded-full border border-muted px-3 py-1 text-muted hover:text-ink hover:border-ink hover:bg-ink/30 transition"
+                    >
+                      Харах
+                    </Link>
+                    <Link
+                      href={`/news/${n.slug}/edit`}
+                      className="text-[9px] tracking-widest uppercase font-bold rounded-full bg-[#3060b01a] border border-[#3060b0cc] px-3 py-1 text-[#3060B0] hover:bg-[rgba(48,96,176,0.30)] transition"
+                    >
+                      Засах
+                    </Link>
+                    <DeleteButton onDelete={deleteNews.bind(null, n.id)} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <NewsPagination page={page} limit={limit} total={total} />
       </div>
     </div>
-  )
+  );
 }
