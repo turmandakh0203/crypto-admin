@@ -21,7 +21,7 @@ function parseTags(raw: string): string[] {
   }
 }
 
-export function formatDate(dateStr: string): string {
+function formatDate(dateStr: string): string {
   if (!dateStr) return "";
   const d = new Date(dateStr);
   const y = d.getUTCFullYear();
