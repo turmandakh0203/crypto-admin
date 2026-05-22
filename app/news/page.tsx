@@ -2,6 +2,8 @@ import { deleteNews, getNewsListLimit } from "@/app/actions/news";
 import NewsPagination from "@/components/NewsPagination";
 import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
+import SeeButton from "@/components/SeeButton";
+import EditButton from "@/components/EditButton";
 
 export const dynamic = "force-dynamic";
 
@@ -66,7 +68,7 @@ export default async function NewsListPage({ searchParams }: Props) {
                     className={`text-[10px] tracking-[0.1em] uppercase flex justify-center px-1.5 py-0.5 border rounded-full font-bebas ${
                       n.published
                         ? "text-success border-[rgba(80,216,128)] bg-[rgba(80,216,128,0.08)]"
-                        : "text-accent bg-[rgba(230,51,41,0.08)] border-[rgba(230,51,41)]"
+                        : "text-amber bg-[rgba(201, 125, 16,0.08)] border-amber"
                     }`}
                   >
                     {n.published ? "Live" : "Draft"}
@@ -95,19 +97,14 @@ export default async function NewsListPage({ searchParams }: Props) {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-end gap-2">
-                    <Link
-                      href={`/news/${n.slug}`}
-                      className="text-[9px] tracking-widest uppercase font-bold rounded-full border border-muted px-3 py-1 text-muted hover:text-ink hover:border-ink hover:bg-ink/30 transition"
-                    >
-                      Харах
+                    <Link href={`/news/${n.slug}`}>
+                      <SeeButton label="See" />
                     </Link>
-                    <Link
-                      href={`/news/${n.slug}/edit`}
-                      className="text-[9px] tracking-widest uppercase font-bold rounded-full bg-[#3060b01a] border border-[#3060b0cc] px-3 py-1 text-[#3060B0] hover:bg-[rgba(48,96,176,0.30)] transition"
-                    >
-                      Засах
+
+                    <Link href={`/news/${n.slug}/edit`}>
+                      <EditButton label="Edit" />
                     </Link>
-                    <DeleteButton onDelete={deleteNews.bind(null, n.id)} />
+                    <DeleteButton onDelete={deleteNews.bind(null, n.id)} label="Delete" />
                   </div>
                 </td>
               </tr>

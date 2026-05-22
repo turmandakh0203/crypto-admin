@@ -4,10 +4,11 @@
 
 /* ── Theme variables ── */
 :root {
-  --accent: rgb(230, 50, 40, 0.8);
+  --accent: #e63228cc;
   --accent-hover: #c0281f;
   --success: #50d880;
-  --default: #3060b0;
+  --default: #5091f5;
+  --amber: #797af8;
 }
 
 html.dark {
@@ -24,7 +25,7 @@ html.dark {
 
 /* ── Light theme ── */
 html.light {
-  --bg: #ffffff;
+  --bg: #e9e9e9;
   --surface: #e9e9e9;
   --border: #929292;
   --ink: #1a1a1a;
@@ -65,6 +66,7 @@ html.light {
   border: 1px solid var(--faint);
   padding: 20px;
   margin-bottom: 16px;
+  border-radius: 20px;
 }
 .adm-grid2 {
   display: grid;
@@ -90,6 +92,7 @@ html.light {
 .adm-btn-red {
   padding: 8px 16px;
   background: var(--accent);
+  border-radius: 20px;
   color: white;
   font-size: 12px;
   letter-spacing: 0.1em;
@@ -103,8 +106,9 @@ html.light {
 }
 .adm-btn-out {
   padding: 8px 16px;
-  border: 1px solid var(--border);
-  color: var(--muted);
+  border: 1px solid var(--amber);
+  border-radius: 20px;
+  color: var(--amber);
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -164,6 +168,7 @@ html.light {
   width: 100%;
   background: var(--input-bg);
   border: 1px solid var(--border);
+  border-radius: 20px;
   color: var(--ink);
   font-family: var(--font-tt-norms-pro);
   font-size: 12px;
@@ -216,14 +221,16 @@ html.light {
   border: 1px solid rgba(230, 51, 41, 0.3);
   font-size: 9px;
   padding: 2px 8px;
+  border-radius: 20px;
 }
 .adm-tag-wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   background: var(--input-bg);
+  border-radius: 20px;
   border: 1px solid var(--border);
-  padding: 6px;
+  padding: 6px 10px;
   min-height: 36px;
 }
 .adm-tag-text {
@@ -294,6 +301,7 @@ html.light {
 /* ── Tiptap Editor ── */
 .tiptap-wrap {
   border: 1px solid var(--border);
+  border-radius: 20px;
   background: var(--input-bg);
 }
 .tiptap-toolbar {
@@ -301,6 +309,7 @@ html.light {
   flex-wrap: wrap;
   gap: 1px;
   align-items: center;
+  border-radius: 20px 20px 0 0;
   padding: 5px 8px;
   border-bottom: 1px solid var(--faint);
   background: var(--surface);
@@ -321,7 +330,7 @@ html.light {
   font-size: 11px;
   cursor: pointer;
   border-radius: 2px;
-  font-family: var(--font-tt-norms-pro);
+  font-family: var(--font-tt-norms-pro), Impact, "Arial Narrow", sans-serif;
   line-height: 1.5;
   background: transparent;
   transition: color 0.1s;
@@ -349,7 +358,7 @@ html.light {
   font-size: 11px;
   cursor: pointer;
   border-radius: 2px;
-  font-family: monospace;
+  font-family: var(--font-tt-norms-pro), Impact, "Arial Narrow", sans-serif;
   line-height: 1.5;
   position: relative;
   transition: color 0.1s;
@@ -585,6 +594,25 @@ html.light {
   color: var(--muted);
   margin-top: 8px;
   letter-spacing: 0.08em;
+}
+
+/* ── Sidebar form inputs (NewsForm) ── */
+.sidebar-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.sidebar-input:focus {
+  border-color: var(--accent);
+}
+.sidebar-input option {
+  background: var(--bg);
 }
 
 .prose table {

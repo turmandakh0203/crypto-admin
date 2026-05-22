@@ -2,13 +2,14 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
+import { DeleteIcon } from "./icons";
 
 interface DeleteButtonProps {
   onDelete: () => Promise<unknown>;
   label?: string;
 }
 
-export default function DeleteButton({ onDelete, label = "Устгах" }: DeleteButtonProps) {
+export default function DeleteButton({ onDelete, label }: DeleteButtonProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -43,9 +44,7 @@ export default function DeleteButton({ onDelete, label = "Устгах" }: Delet
             Устгах баталгаажуулалт
           </span>
         </div>
-        <p className="text-[16px] text-ink font-ttNormsPro mb-1">
-          Устгахдаа итгэлтэй байна уу?
-        </p>
+        <p className="text-[16px] text-ink font-ttNormsPro mb-1">Устгахдаа итгэлтэй байна уу?</p>
         <p className="text-[12px] text-muted font-ttNormsPro mb-6">
           Энэ үйлдлийг буцаах боломжгүй.
         </p>
@@ -71,12 +70,20 @@ export default function DeleteButton({ onDelete, label = "Устгах" }: Delet
 
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        className="text-[9px] tracking-widest uppercase font-bold rounded-full px-3 py-1 text-accent border border-accent bg-[rgba(230,51,41,0.1)] transition"
-      >
-        {label}
-      </button>
+      <div className="grid justify-items-center">
+        <button
+          onClick={() => setOpen(true)}
+          className={`flex items-center gap-1 text-[9px] tracking-widest rounded-full  ${label ? "px-5 py-[1px]" : "px-10 py-0.5"}  text-[#EB534E] border border-accent bg-[#EB534E] transition`}
+        >
+          <DeleteIcon className="text-white w-4 h-4" />
+          <p
+            className={`text-white text-[14px] font-semibold font-ttNormsPro ${label ? "hidden" : ""}`}
+          >
+            Устгах
+          </p>
+        </button>
+        <span className="text-[12px] font-bebas font-semibold text-ink">{label}</span>
+      </div>
       {open && createPortal(modal, document.body)}
     </>
   );

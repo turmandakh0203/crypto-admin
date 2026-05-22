@@ -222,7 +222,7 @@ export default function CategoryModal({ category, onClose }: Props) {
 
         {/* Footer */}
         <div className="px-6 pb-6 pt-4 border-t border-faint flex items-center gap-2 flex-shrink-0 justify-between">
-          {category && <DeleteButton onDelete={handleDelete} label="Устгах" />}
+          {category && <DeleteButton onDelete={handleDelete} />}
           <button
             onClick={handleSave}
             disabled={loading}

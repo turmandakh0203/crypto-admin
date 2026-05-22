@@ -6,6 +6,9 @@ import {
 } from "@/app/actions/comments";
 import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
+import SpamButton from "@/components/SpamButton";
+import HideButton from "@/components/HideButton";
+import PublishedButton from "@/components/PublishedButton";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +22,7 @@ const STATUS_TABS = [
 const STATUS_STYLE: Record<string, string> = {
   pending: "text-default border-default",
   published: "text-success border-[rgba(80,216,128,0.4)] bg-[rgba(80,216,128,0.08)]",
-  spam: "text-accent border-[rgba(230,51,41,0.4)] bg-[rgba(230,51,41,0.08)]",
+  spam: "text-amber border-amber",
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -104,9 +107,9 @@ export default async function CommentsPage({ searchParams }: Props) {
             {comments.map((c) => (
               <tr key={c.id} className="border-t border-faint hover:bg-surface transition">
                 {/* Status */}
-                <td className="px-4 py-3 w-[140px]">
+                <td className="px-4 py-3 w-[150px]">
                   <span
-                    className={`text-[9px] tracking-[0.1em] uppercase font-bebas px-2 py-0.5 border rounded-full ${STATUS_STYLE[c.status]}`}
+                    className={`text-[12px] tracking-[0.1em] font-bebas font-semibold px-2 py-0.5 border rounded-full ${STATUS_STYLE[c.status]}`}
                   >
                     {STATUS_LABEL[c.status]}
                   </span>
@@ -149,35 +152,20 @@ export default async function CommentsPage({ searchParams }: Props) {
                   <div className="flex items-center gap-1.5 flex-wrap">
                     {c.status !== "published" && (
                       <form action={setCommentStatus.bind(null, c.id, "published")}>
-                        <button
-                          type="submit"
-                          className="text-[9px] tracking-widest uppercase font-bold rounded-full px-2.5 py-1 border border-[rgba(80,216,128,0.4)] text-success bg-[rgba(80,216,128,0.08)] hover:bg-[rgba(80,216,128,0.18)] transition"
-                        >
-                          Нийтлэх
-                        </button>
+                        <PublishedButton label="Published" />
                       </form>
                     )}
                     {c.status === "published" && (
                       <form action={setCommentStatus.bind(null, c.id, "pending")}>
-                        <button
-                          type="submit"
-                          className="text-[9px] tracking-widest uppercase font-bold rounded-full px-2.5 py-1 border border-border text-muted hover:text-ink hover:border-[#555] transition"
-                        >
-                          Нуух
-                        </button>
+                        <HideButton label="Hide" />
                       </form>
                     )}
                     {c.status !== "spam" && (
                       <form action={setCommentStatus.bind(null, c.id, "spam")}>
-                        <button
-                          type="submit"
-                          className="text-[9px] tracking-widest uppercase font-bold rounded-full px-2.5 py-1 border border-[rgba(230,180,0,0.4)] text-[#e4b400] bg-[rgba(228,180,0,0.08)] hover:bg-[rgba(228,180,0,0.18)] transition"
-                        >
-                          Спам
-                        </button>
+                        <SpamButton label="Spam" />
                       </form>
                     )}
-                    <DeleteButton onDelete={deleteComment.bind(null, c.id)} label="Устгах" />
+                    <DeleteButton onDelete={deleteComment.bind(null, c.id)} label="Delete" />
                   </div>
                 </td>
               </tr>

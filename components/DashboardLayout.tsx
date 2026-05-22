@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { NAV } from "@/types/news";
 import ThemeToggle from "./ThemeToggle";
+import LogoutButton from "./LogoutButton";
 import { useTheme } from "next-themes";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -14,8 +15,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const isDark = !mounted || resolvedTheme === "dark";
   const logo = isDark ? "/ciphernews_icon_white.svg" : "/ciphernews_icon_dark.svg";
 
+  if (pathname === "/login") return <>{children}</>;
+
   return (
-    <div className="min-h-screen bg-bg text-ink flex">
+    <div className="h-screen bg-bg text-ink flex overflow-hidden">
       {/* Sidebar */}
       <aside className="w-[200px] flex-shrink-0 border-r border-faint flex flex-col sticky top-0 h-screen">
         {/* Brand */}
@@ -49,20 +52,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </nav>
 
         {/* Footer */}
-        <div className="px-1 flex items-center h-12 gap-3 border-t border-[var(--border)]  min-w-[180px]">
+        <div className="px-1 flex items-center justify-between h-12 gap-3 border-t border-[var(--border)] min-w-[180px]">
           <div className="flex items-center gap-2">
             <ThemeToggle />
             {mounted && (
               <span className="text-[11px] tracking-[0.08em] uppercase font-ttNormsPro text-muted whitespace-nowrap">
-                {isDark ? "Dark theme" : "Light theme"}
+                {isDark ? "Dark" : "Light"}
               </span>
             )}
           </div>
+          <LogoutButton />
         </div>
       </aside>
 
       {/* Main */}
-      <main className="flex-1 min-w-0">{children}</main>
+      <main className="flex-1 min-w-0 overflow-hidden">{children}</main>
     </div>
   );
 }

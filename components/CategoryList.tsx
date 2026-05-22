@@ -3,10 +3,23 @@
 import { useState } from "react";
 import CategoryModal from "@/components/CategoryModal";
 import type { Category } from "@/types/news";
+import EditButton from "@/components/EditButton";
 
 interface Props {
   initialCategories: Category[];
 }
+
+const Th = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+  <th className={`text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold ${className ?? ""}`}>
+    {children}
+  </th>
+)
+
+const Td = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+  <td className={`px-4 py-3 text-[12px] text-muted font-mono ${className ?? ""}`}>
+    {children}
+  </td>
+)
 
 export default function CategoryList({ initialCategories }: Props) {
   const categories = initialCategories;
@@ -38,45 +51,21 @@ export default function CategoryList({ initialCategories }: Props) {
       </div>
 
       <div className="border border-border rounded-xl overflow-hidden">
-        <table className="w-full">
+        <table className="w-full ">
           <thead>
             <tr className="border-b border-border bg-bg">
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                #
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                Нэр
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                Section_label
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                Line_1
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                Line_2
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold w-[300px]">
-                description
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                sort_order
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                төлөв
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                Slug
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                Nav label
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                Icon
-              </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
-                Үйлдэл
-              </th>
+              <Th>#</Th>
+              <Th>Нэр</Th>
+              <Th>Section_label</Th>
+              <Th>Line_1</Th>
+              <Th>Line_2</Th>
+              <Th className="w-[300px]">description</Th>
+              <Th>sort_order</Th>
+              <Th>төлөв</Th>
+              <Th>Slug</Th>
+              <Th>Nav label</Th>
+              <Th>Icon</Th>
+              <Th>Үйлдэл</Th>
             </tr>
           </thead>
           <tbody>
@@ -89,15 +78,15 @@ export default function CategoryList({ initialCategories }: Props) {
             )}
             {categories.map((cat) => (
               <tr key={cat.id} className="border-t border-faint hover:bg-surface transition">
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">{cat.sort_order}</td>
+                <Td>{cat.sort_order}</Td>
                 <td className="px-4 py-3">
                   <p className="text-[14px] text-ink">{cat.name}</p>
                 </td>
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">{cat.section_label}</td>
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">{cat.line1}</td>
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">{cat.line2}</td>
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">{cat.description}</td>
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">{cat.sort_order}</td>
+                <Td>{cat.section_label}</Td>
+                <Td>{cat.line1}</Td>
+                <Td>{cat.line2}</Td>
+                <Td>{cat.description}</Td>
+                <Td>{cat.sort_order}</Td>
                 <td className="px-4 py-3">
                   <span
                     className={`text-[10px] tracking-[0.1em] uppercase font-bebas inline-flex px-2 py-1 border rounded-full ${
@@ -109,20 +98,12 @@ export default function CategoryList({ initialCategories }: Props) {
                     {cat.is_active ? "Идэвхтэй" : "Идэвхгүй"}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">{cat.slug}</td>
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">
-                  {cat.nav_label || "—"}
-                </td>
-                <td className="px-4 py-3 text-[12px] text-muted font-mono">{cat.icon}</td>
-
+                <Td>{cat.slug}</Td>
+                <Td>{cat.nav_label || "—"}</Td>
+                <Td>{cat.icon}</Td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end">
-                    <button
-                      onClick={() => openEdit(cat)}
-                      className="text-[10px] tracking-widest uppercase font-bold rounded-full bg-[#3060b01a] border border-[#3060b0cc] px-3 py-1 text-[#3060B0] hover:bg-[rgba(48,96,176,0.30)] transition"
-                    >
-                      Засах
-                    </button>
+                    <EditButton onClick={() => openEdit(cat)} />
                   </div>
                 </td>
               </tr>

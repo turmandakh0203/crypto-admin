@@ -22,6 +22,7 @@ const config: Config = {
         accent: "var(--accent)",
         success: "var(--success)",
         default: "var(--default)",
+        amber: "var(--amber)",
       },
     },
   },
