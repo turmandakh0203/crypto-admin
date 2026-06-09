@@ -1,12 +1,12 @@
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { createClient } from '@supabase/supabase-js'
 
 export type { News } from '@/types/news'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-// Client-side (form save/update)
-export const supabase = createClient(supabaseUrl, supabaseKey)
+// Client-side: cookie-д session хадгалдаг тул middleware-тай зөв ажилладаг
+export const supabase = createClientComponentClient()
 
 // Server-side (RLS тойрч бүгдийг уншина, cache байхгүй)
 export const supabaseAdmin = () => createClient(

@@ -211,7 +211,7 @@ export default function NewsForm({ existing, categories }: Props) {
         </div>
 
         {/* ── Right: Sidebar ── */}
-        <div className="w-[400px] border-l border-border overflow-y-auto flex-shrink-0 flex flex-col">
+        <div className="w-[540px] border-l border-border overflow-y-auto flex-shrink-0 flex flex-col">
           <div className="px-5 py-4 border-b border-faint">
             <p className="text-[10px] tracking-[0.2em] uppercase text-muted font-bebas font-semibold">
               Нийтлэлийн мэдээлэл

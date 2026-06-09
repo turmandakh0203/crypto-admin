@@ -60,12 +60,12 @@ export default async function NewsPreviewPage({ params }: { params: { slug: stri
           >
             ← Буцах
           </Link>
-          <div className="w-px h-3 bg-border" />
+          <div className="w-px h-5 bg-border" />
           <span
             className={`text-[11px] tracking-[0.1em] rounded-full font-bebas px-2 py-0.5 border ${
               isPublished
                 ? "text-success border-[rgba(80,216,128,0.3)] bg-[rgba(80,216,128,0.05)]"
-                : "text-muted border-border"
+                : "text-amber border-amber bg-[rgba(230,51,41,0.05)]"
             }`}
           >
             {isPublished ? "Live" : "Draft"}
@@ -144,7 +144,7 @@ export default async function NewsPreviewPage({ params }: { params: { slug: stri
         )}
 
         {/* Content */}
-        <div className="max-w-[840px] mx-auto px-6 py-10">
+        <div className="max-w-[1040px] mx-auto px-6 py-10">
           {/* Tags */}
           {tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-5">

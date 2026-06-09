@@ -45,7 +45,7 @@ export default async function CommentsPage({ searchParams }: Props) {
   ]);
 
   return (
-    <div className="min-h-screen bg-bg text-ink p-6">
+    <div className="min-h-screen bg-bg text-ink py-3 px-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-ttNormsPro font-bold text-3xl">
           <span className="text-accent">Сэтгэгдэл</span>
@@ -64,7 +64,8 @@ export default async function CommentsPage({ searchParams }: Props) {
               className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] tracking-[0.12em] uppercase font-bebas font-semibold border transition ${
                 isActive
                   ? "border-accent text-accent bg-[rgba(230,51,41,0.08)]"
-                  : "border-border text-muted hover:text-ink hover:border-[#555]"
+                  : // : "border-border text-muted hover:text-ink hover:border-[#555]"
+                    "border-[#555] text-ink hover:text-muted hover:border-border"
               }`}
             >
               {tab.label}
@@ -85,7 +86,7 @@ export default async function CommentsPage({ searchParams }: Props) {
               <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold">
                 Сэтгэгдэл
               </th>
-              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold w-[160px]">
+              <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold w-[400px]">
                 Мэдээ
               </th>
               <th className="text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold w-[120px]">

@@ -28,8 +28,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-bg flex items-center justify-center">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="text-[28px] font-bold text-ink tracking-tight">CRYPTO NEWS</div>
-          <div className="text-[12px] text-muted tracking-[0.12em] uppercase mt-1">Admin Panel</div>
+          <div className="text-[28px] font-bold text-accent tracking-tight">CRYPTO NEWS</div>
+          <div className="text-[12px] text-muted tracking-[0.12em] uppercase mt-1">Dashboard</div>
         </div>
 
         <form
@@ -65,9 +65,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {error && (
-            <p className="text-[12px] text-accent font-semibold">{error}</p>
-          )}
+          {error && <p className="text-[12px] text-accent font-semibold">{error}</p>}
 
           <button
             type="submit"

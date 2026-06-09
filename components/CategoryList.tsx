@@ -10,16 +10,16 @@ interface Props {
 }
 
 const Th = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <th className={`text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold ${className ?? ""}`}>
+  <th
+    className={`text-left px-4 py-2.5 text-[11px] tracking-widest text-muted font-semibold ${className ?? ""}`}
+  >
     {children}
   </th>
-)
+);
 
 const Td = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <td className={`px-4 py-3 text-[12px] text-muted font-mono ${className ?? ""}`}>
-    {children}
-  </td>
-)
+  <td className={`px-4 py-3 text-[12px] text-muted font-mono ${className ?? ""}`}>{children}</td>
+);
 
 export default function CategoryList({ initialCategories }: Props) {
   const categories = initialCategories;
@@ -37,7 +37,7 @@ export default function CategoryList({ initialCategories }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-bg text-ink p-6">
+    <div className="min-h-screen bg-bg text-ink py-3 px-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-ttNormsPro font-bold text-3xl">
           <span className="text-accent">Категориуд</span>
@@ -92,7 +92,7 @@ export default function CategoryList({ initialCategories }: Props) {
                     className={`text-[10px] tracking-[0.1em] uppercase font-bebas inline-flex px-2 py-1 border rounded-full ${
                       cat.is_active
                         ? "text-success border-[rgba(80,216,128,0.3)] bg-[rgba(80,216,128,0.08)]"
-                        : "text-muted border-border bg-transparent"
+                        : "text-accent border-accent bg-transparent"
                     }`}
                   >
                     {cat.is_active ? "Идэвхтэй" : "Идэвхгүй"}

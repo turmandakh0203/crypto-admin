@@ -24,11 +24,12 @@ const ResizableImageView = ({ node, updateAttributes, selected }: NodeViewProps)
   const startPX = useRef(0)
   const startPY = useRef(0)
 
-  const align    = (node.attrs.align    as string)         ?? 'center'
+  const align    = (node.attrs.align    as string)              ?? 'center'
   const width    = node.attrs.width    as number | null
-  const floating = node.attrs.floating as boolean          ?? false
-  const posX     = node.attrs.posX     as number           ?? 20
-  const posY     = node.attrs.posY     as number           ?? 20
+  const floating = node.attrs.floating as boolean               ?? false
+  const wrap     = (node.attrs.wrap    as 'none'|'left'|'right') ?? 'none'
+  const posX     = node.attrs.posX     as number                ?? 20
+  const posY     = node.attrs.posY     as number                ?? 20
 
   // ── Resize ──
   const onResizeStart = (e: React.MouseEvent) => {
@@ -64,9 +65,15 @@ const ResizableImageView = ({ node, updateAttributes, selected }: NodeViewProps)
   }
 
   const marginStyle: React.CSSProperties =
+    wrap !== 'none'   ? {} :
     align === 'left'  ? { marginRight: 'auto' } :
     align === 'right' ? { marginLeft: 'auto'  } :
                         { margin: '0 auto'     }
+
+  const wrapStyle: React.CSSProperties =
+    wrap === 'left'  ? { float: 'left',  marginRight: '1.2em', marginBottom: '0.5em' } :
+    wrap === 'right' ? { float: 'right', marginLeft:  '1.2em', marginBottom: '0.5em' } :
+    {}
 
   const controls = selected && (
     <>
@@ -153,7 +160,7 @@ const ResizableImageView = ({ node, updateAttributes, selected }: NodeViewProps)
 
   // ── Normal (block) mode ──
   return (
-    <NodeViewWrapper>
+    <NodeViewWrapper style={wrap !== 'none' ? wrapStyle : undefined}>
       <div style={{ display: 'block', position: 'relative', width: 'fit-content', ...marginStyle }}>
         <div data-drag-handle style={{
           position: 'absolute', top: 4, left: 4, zIndex: 10,
@@ -207,7 +214,22 @@ const CustomImage = Image.extend({
         parseHTML: el => parseInt((el as HTMLElement).getAttribute('data-pos-y') ?? '20'),
         renderHTML: attrs => (attrs.floating ? { 'data-pos-y': attrs.posY } : {}),
       },
+      wrap: {
+        default: 'none',
+        parseHTML: el => (el as HTMLElement).getAttribute('data-wrap') ?? 'none',
+        renderHTML: attrs => (attrs.wrap && attrs.wrap !== 'none' ? { 'data-wrap': attrs.wrap } : {}),
+      },
     }
+  },
+  renderHTML({ HTMLAttributes, node }) {
+    const { wrap } = node.attrs as { wrap: string }
+    if (wrap === 'left' || wrap === 'right') {
+      const style = wrap === 'left'
+        ? 'float:left;margin-right:1.2em;margin-bottom:0.5em;width:fit-content'
+        : 'float:right;margin-left:1.2em;margin-bottom:0.5em;width:fit-content'
+      return ['div', { style, 'data-wrap': wrap }, ['img', mergeAttributes(HTMLAttributes)]]
+    }
+    return ['img', mergeAttributes(HTMLAttributes)]
   },
   addNodeView() {
     return ReactNodeViewRenderer(ResizableImageView)
@@ -622,6 +644,21 @@ export default function TiptapEditor({ value, onChange, placeholder }: Props) {
             >
               {a === 'left' ? '⬡←' : a === 'center' ? '⬡↔' : '⬡→'}
             </button>
+          ))}
+          <span className="tiptap-sep" />
+          {/* Текс хажуу wrap */}
+          {([
+            { v: 'left',  label: '←wrap', title: 'Зургийг зүүн, текс баруунаас ороно' },
+            { v: 'right', label: 'wrap→', title: 'Зургийг баруун, текс зүүнээс ороно' },
+            { v: 'none',  label: 'block',  title: 'Блок горим (wrap байхгүй)'          },
+          ] as const).map(({ v, label, title }) => (
+            <button
+              key={v}
+              type="button"
+              className={`tiptap-bubble-btn${editor.getAttributes('image').wrap === v || (v === 'none' && !editor.getAttributes('image').wrap) ? ' active' : ''}`}
+              onMouseDown={e => { e.preventDefault(); editor.chain().focus().updateAttributes('image', { wrap: v }).run() }}
+              title={title}
+            >{label}</button>
           ))}
           <span className="tiptap-sep" />
           <button

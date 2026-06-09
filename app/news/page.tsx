@@ -19,7 +19,7 @@ export default async function NewsListPage({ searchParams }: Props) {
   const { data: news, total } = await getNewsListLimit(page, limit);
 
   return (
-    <div className="min-h-screen bg-bg text-ink p-6">
+    <div className="min-h-screen bg-bg text-ink py-3 px-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-ttNormsPro font-bold text-3xl">
           <span className="text-accent">Нийтлэлүүд</span>

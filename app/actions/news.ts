@@ -124,6 +124,9 @@ export async function getNewsViews(): Promise<PageViews[]> {
 }
 
 export async function deleteNews(id: number): Promise<{ error: string | null }> {
+  const { error: pvError } = await supabaseAdmin().from("page_views").delete().eq("news_id", id);
+  if (pvError) return { error: pvError.message };
+
   const { error } = await supabaseAdmin().from("news").delete().eq("id", id);
   if (!error) revalidatePath("/news");
   return { error: error?.message ?? null };
